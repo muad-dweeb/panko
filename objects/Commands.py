@@ -6,8 +6,9 @@ from objects.Funds import Funds
 
 class Response:
 
-    def __init__(self, text: str):
+    def __init__(self, text: str = None, reaction: str = None):
         self.message = self._format(text)
+        self.reaction = reaction
 
     @staticmethod
     def _format(text):
@@ -48,7 +49,7 @@ class Plus(Command):
     def __init__(self):
         self._funds = Funds()
 
-    def do(self, amount, currency):
+    def do(self, amount, currency) -> Response:
         if currency not in ['platinum', 'gold', 'silver', 'copper']:
             return Response(text=f'Invalid coin type: {currency}')
 
@@ -57,7 +58,7 @@ class Plus(Command):
         setattr(self._funds, currency, current + int(amount))
 
         self._funds.save()
-        return Response(text='Done!')
+        return Response(reaction='👍')
 
 
 AVAILABLE: List[Any] = [Show, Plus]

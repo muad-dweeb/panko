@@ -1,4 +1,5 @@
 import discord
+from discord import Emoji
 
 from objects import Commands
 from objects.Config import Config
@@ -33,7 +34,10 @@ async def on_message(message):
         for command in Commands.AVAILABLE:
             if selection in command.tags:
                 response = command().do(*args)
-                await message.channel.send(response.message)
+                if response.reaction is not None:
+                    await message.add_reaction(response.reaction)
+                if response.message is not None:
+                    await message.channel.send(response.message)
 
 
 client.run(config.token)
