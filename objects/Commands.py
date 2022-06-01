@@ -1,6 +1,7 @@
 from abc import abstractmethod
 from typing import List, Any
 
+from coins import coins
 from objects.Funds import Funds
 from objects.Response import Response
 
@@ -40,7 +41,7 @@ class Plus(Command):
         self._funds = Funds()
 
     def do(self, amount, currency) -> Response:
-        if currency not in ['platinum', 'gold', 'silver', 'copper']:
+        if currency not in coins.keys():
             return Response(title='Error!',
                             text=f'Invalid coin type: {currency}')
 
@@ -52,4 +53,24 @@ class Plus(Command):
         return Response(reaction='👍')
 
 
-AVAILABLE: List[Any] = [Show, Plus]
+class Minus(Command):
+
+    tags = ['-', 'subtract', 'minus']
+
+    def __init__(self):
+        self._funds = Funds()
+
+    def do(self, amount, currency) -> Response:
+        if currency not in coins.keys():
+            return Response(title='Error!',
+                            text=f'Invalid coin type: {currency}')
+
+        print(f'Removing {amount} {currency}...')
+        current = getattr(self._funds, currency)
+        setattr(self._funds, currency, current - int(amount))
+
+        self._funds.save()
+        return Response(reaction='👍')
+
+
+AVAILABLE: List[Any] = [Show, Plus, Minus]
