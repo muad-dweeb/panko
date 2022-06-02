@@ -1,13 +1,16 @@
 import json
 import os
+from typing import Union
+
+from discord import Guild, TextChannel
 
 from objects.FileStorage import FileStorage
 
 
 class Funds(FileStorage):
 
-    def __init__(self, source_id: str):
-        self.__source_id = source_id
+    def __init__(self, source: Union[Guild, TextChannel]):
+        self.__source = source
         self.__prep()
 
         super().__init__()
@@ -24,10 +27,11 @@ class Funds(FileStorage):
 
     @property
     def file_name(self):
-        return f'data/{self.__source_id}.json'
+        return f'data/{self.__source.id}.json'
 
     def to_dict(self) -> dict:
         return {
+            '_source': str(self.__source),
             'copper': self.copper,
             'silver': self.silver,
             'gold': self.gold,

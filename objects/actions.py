@@ -27,7 +27,7 @@ class FundedAction(Action, ABC):
     def __init__(self, source: Union[Guild, TextChannel]):
         super().__init__(source)
         self._source = source
-        self._funds = Funds(source.id)
+        self._funds = Funds(source)
 
 
 class Show(FundedAction):
