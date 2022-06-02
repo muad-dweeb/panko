@@ -1,3 +1,4 @@
+import json
 from abc import abstractmethod, ABC
 from typing import List, Any, Union
 
@@ -24,6 +25,10 @@ class Action:
 
 
 class FundedAction(Action, ABC):
+    """
+    An abstract base class for any action requiring
+      initialization of the Funds object
+    """
     def __init__(self, source: Union[Guild, TextChannel]):
         super().__init__(source)
         self._source = source
@@ -82,4 +87,15 @@ class Minus(FundedAction):
         return Response(reaction='👍')
 
 
-AVAILABLE: List[Any] = [Show, Plus, Minus]
+class Raw(FundedAction):
+
+    tag = 'raw'
+
+    def do(self) -> Response:
+        formatted = json.dumps(self._funds.to_dict(), indent=2)
+        return Response(title='Raw JSON:',
+                        text=f'```{formatted}```',
+                        fields=[('file', self._funds.file_name)])
+
+
+AVAILABLE: List[Any] = [Show, Plus, Minus, Raw]
