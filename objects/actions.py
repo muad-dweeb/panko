@@ -1,16 +1,16 @@
 from abc import abstractmethod
 from typing import List, Any
 
-from coins import coins
+from coins import Coins, CoinError
 from objects.Funds import Funds
 from objects.Response import Response
 
 
-class Command:
+class Action:
 
     @property
     @abstractmethod
-    def tags(self) -> List[str]:
+    def tag(self) -> str:
         raise NotImplementedError
 
     @abstractmethod
@@ -18,9 +18,9 @@ class Command:
         raise NotImplementedError
 
 
-class Show(Command):
+class Show(Action):
 
-    tags = ['show']
+    tag = 'show'
 
     def __init__(self):
         self._funds = Funds()
@@ -33,41 +33,45 @@ class Show(Command):
                              f'**copper:** {self._funds.copper}\n')
 
 
-class Plus(Command):
+class Plus(Action):
 
-    tags = ['+', 'add', 'plus']
+    tag = '+'
 
     def __init__(self):
         self._funds = Funds()
 
     def do(self, amount, currency) -> Response:
-        if currency not in coins.keys():
+        try:
+            coin = Coins.get_unit(alias=currency)
+        except CoinError as e:
             return Response(title='Error!',
-                            text=f'Invalid coin type: {currency}')
+                            text=f'{e}')
 
-        print(f'Adding {amount} {currency}...')
-        current = getattr(self._funds, currency)
-        setattr(self._funds, currency, current + int(amount))
+        print(f'Adding {amount} {coin.name}...')
+        current = getattr(self._funds, coin.name)
+        setattr(self._funds, coin.name, current + int(amount))
 
         self._funds.save()
         return Response(reaction='👍')
 
 
-class Minus(Command):
+class Minus(Action):
 
-    tags = ['-', 'subtract', 'minus']
+    tag = '-'
 
     def __init__(self):
         self._funds = Funds()
 
     def do(self, amount, currency) -> Response:
-        if currency not in coins.keys():
+        try:
+            coin = Coins.get_unit(alias=currency)
+        except CoinError as e:
             return Response(title='Error!',
-                            text=f'Invalid coin type: {currency}')
+                            text=f'{e}')
 
-        print(f'Removing {amount} {currency}...')
-        current = getattr(self._funds, currency)
-        setattr(self._funds, currency, current - int(amount))
+        print(f'Removing {amount} {coin.name}...')
+        current = getattr(self._funds, coin.name)
+        setattr(self._funds, coin.name, current - int(amount))
 
         self._funds.save()
         return Response(reaction='👍')

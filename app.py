@@ -1,6 +1,7 @@
 import discord
 
-from objects import Commands
+from objects import actions
+from objects.Command import Command
 from objects.Config import Config
 
 intents = discord.Intents.default()
@@ -26,13 +27,10 @@ async def on_message(message):
 
     elif message.content.startswith('!panko'):
         elements = message.content.split(' ')
-        selection = elements[1]
-        args = list()
-        if len(elements) > 2:
-            args = elements[2:]
-        for command in Commands.AVAILABLE:
-            if selection in command.tags:
-                response = command().do(*args)
+        command = Command(elements[1])
+        for action in actions.AVAILABLE:
+            if command.action == action.tag:
+                response = action().do(*command.args)
                 if response.reaction is not None:
                     await message.add_reaction(response.reaction)
                 if response.message is not None:
