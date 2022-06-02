@@ -133,4 +133,4 @@ dmypy.json
 
 # Secrets
 config.json
-funds.json
+data

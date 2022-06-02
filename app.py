@@ -25,12 +25,23 @@ async def on_message(message):
     if message.content.startswith('!hello'):
         await message.channel.send('Hello!')
 
+    # Let's go!!!
     elif message.content.startswith('!panko'):
+
+        # Where the message originated from
+        if not hasattr(message.channel, 'guild'):
+            source = message.channel
+        else:
+            source = message.channel.guild
+
+        # The message input text
         elements = message.content.split(' ')
         command = Command(elements[1])
+
+        # Find the appropriate action and do it
         for action in actions.AVAILABLE:
             if command.action == action.tag:
-                response = action().do(*command.args)
+                response = action(source).do(*command.args)
                 if response.reaction is not None:
                     await message.add_reaction(response.reaction)
                 if response.message is not None:

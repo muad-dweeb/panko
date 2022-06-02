@@ -32,8 +32,3 @@ class FileStorage:
                 return contents
             except JSONDecodeError as e:
                 raise e
-
-    # def save(self):
-    #     print(f'Saving: {self._loaded}...')
-    #     with open(self.file_name, 'w') as f:
-    #         json.dump(self._loaded, f)

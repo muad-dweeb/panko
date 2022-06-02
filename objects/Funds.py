@@ -1,17 +1,30 @@
 import json
+import os
 
 from objects.FileStorage import FileStorage
 
 
 class Funds(FileStorage):
-    file_name = 'funds.json'
 
-    def __init__(self):
+    def __init__(self, source_id: str):
+        self.__source_id = source_id
+        self.__prep()
+
         super().__init__()
+
         self.copper = self._get('copper')
         self.silver = self._get('silver')
         self.gold = self._get('gold')
         self.platinum = self._get('platinum')
+
+    @staticmethod
+    def __prep():
+        if not os.path.isdir('./data'):
+            os.mkdir('./data')
+
+    @property
+    def file_name(self):
+        return f'data/{self.__source_id}.json'
 
     def to_dict(self) -> dict:
         return {
@@ -29,6 +42,5 @@ class Funds(FileStorage):
             return 0
 
     def save(self):
-        print(f'Saving: {self.to_dict()}...')
         with open(self.file_name, 'w') as f:
             json.dump(self.to_dict(), f)

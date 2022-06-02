@@ -1,5 +1,7 @@
-from abc import abstractmethod
-from typing import List, Any
+from abc import abstractmethod, ABC
+from typing import List, Any, Union
+
+from discord import Guild, TextChannel
 
 from coins import Coins, CoinError
 from objects.Funds import Funds
@@ -7,6 +9,9 @@ from objects.Response import Response
 
 
 class Action:
+
+    def __init__(self, source: Union[Guild, TextChannel]):
+        self.__source = source
 
     @property
     @abstractmethod
@@ -18,12 +23,16 @@ class Action:
         raise NotImplementedError
 
 
-class Show(Action):
+class FundedAction(Action, ABC):
+    def __init__(self, source: Union[Guild, TextChannel]):
+        super().__init__(source)
+        self._source = source
+        self._funds = Funds(source.id)
+
+
+class Show(FundedAction):
 
     tag = 'show'
-
-    def __init__(self):
-        self._funds = Funds()
 
     def do(self) -> Response:
         return Response(title='Current funds!',
@@ -33,12 +42,9 @@ class Show(Action):
                              f'**copper:** {self._funds.copper}\n')
 
 
-class Plus(Action):
+class Plus(FundedAction):
 
     tag = '+'
-
-    def __init__(self):
-        self._funds = Funds()
 
     def do(self, amount, currency) -> Response:
         try:
@@ -47,20 +53,18 @@ class Plus(Action):
             return Response(title='Error!',
                             text=f'{e}')
 
-        print(f'Adding {amount} {coin.name}...')
+        print(f'{self._source.id}: Adding {amount} {coin.name}...')
         current = getattr(self._funds, coin.name)
         setattr(self._funds, coin.name, current + int(amount))
 
+        print(f'{self._source.id}: Saving: {self._funds.to_dict()}...')
         self._funds.save()
         return Response(reaction='👍')
 
 
-class Minus(Action):
+class Minus(FundedAction):
 
     tag = '-'
-
-    def __init__(self):
-        self._funds = Funds()
 
     def do(self, amount, currency) -> Response:
         try:
@@ -69,10 +73,11 @@ class Minus(Action):
             return Response(title='Error!',
                             text=f'{e}')
 
-        print(f'Removing {amount} {coin.name}...')
+        print(f'{self._source.id}: Removing {amount} {coin.name}...')
         current = getattr(self._funds, coin.name)
         setattr(self._funds, coin.name, current - int(amount))
 
+        print(f'{self._source.id}: Saving: {self._funds.to_dict()}...')
         self._funds.save()
         return Response(reaction='👍')
 
