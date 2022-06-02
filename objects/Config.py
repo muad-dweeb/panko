@@ -12,3 +12,6 @@ class Config(FileStorage):
         self.token = self._loaded['token']
         self.add_url = self._loaded['add_url']
         self.color = Colour.gold()
+        self.homepage = self._loaded['homepage']
+        self.version = self._loaded['version']
+        self.license = self._loaded['license']

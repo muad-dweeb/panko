@@ -13,15 +13,17 @@ class Response:
                  title: str = None,
                  text: str = None,
                  fields: List[Tuple[str, Any]] = None,
-                 reaction: str = None):
-        self.message = self._format(title, text, fields)
+                 reaction: str = None,
+                 url: str = None):
+        self.message = self._format(title, text, fields, url)
         self.reaction = reaction
 
     @staticmethod
     def _format(title: str = None,
                 text: str = None,
-                fields: list = None) -> Union[Embed, None]:
-        if title is None and text is None and fields is None:
+                fields: list = None,
+                url: str = None) -> Union[Embed, None]:
+        if title is None and text is None and fields is None and url is None:
             return None
         if fields is None:
             fields = list()
@@ -34,4 +36,6 @@ class Response:
             key = item[0]
             value = item[1]
             embed.add_field(name=key, value=value, inline=False)
+        if url is not None:
+            embed.url = url
         return embed

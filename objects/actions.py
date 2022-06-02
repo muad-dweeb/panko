@@ -1,10 +1,12 @@
 import json
 from abc import abstractmethod, ABC
+from datetime import timedelta
 from typing import List, Any, Union
 
 from discord import Guild, TextChannel
 
 from coins import Coins, CoinError
+from objects.Config import Config
 from objects.Funds import Funds
 from objects.Response import Response
 
@@ -98,4 +100,23 @@ class Raw(FundedAction):
                         fields=[('file', self._funds.file_name)])
 
 
-AVAILABLE: List[Any] = [Show, Plus, Minus, Raw]
+class About(Action):
+
+    tag = 'about'
+
+    def do(self, uptime: timedelta, guild_count: int) -> Response:
+        config = Config()
+        up_minutes = round(uptime.total_seconds() / 60, 2)
+        return Response(title='About Panko!',
+                        text='Party funds tracker',
+                        fields=[
+                            ('Author', '[muad-dweeb](https://github.com/muad-dweeb/)'),
+                            ('Version', config.version),
+                            ('License', config.license),
+                            ('Uptime', f'{up_minutes} minutes'),
+                            ('Active Guilds', guild_count)
+                        ],
+                        url=config.homepage)
+
+
+AVAILABLE: List[Any] = [Show, Plus, Minus, Raw, About]
