@@ -53,11 +53,11 @@ class Plus(FundedAction):
             return Response(title='Error!',
                             text=f'{e}')
 
-        print(f'{self._source.id}: Adding {amount} {coin.name}...')
+        print(f'{self._source.id}: Adding {amount} {coin.name}')
         current = getattr(self._funds, coin.name)
         setattr(self._funds, coin.name, current + int(amount))
 
-        print(f'{self._source.id}: Saving: {self._funds.to_dict()}...')
+        print(f'{self._source.id}: Saving: {self._funds.to_dict()}')
         self._funds.save()
         return Response(reaction='👍')
 
@@ -73,11 +73,11 @@ class Minus(FundedAction):
             return Response(title='Error!',
                             text=f'{e}')
 
-        print(f'{self._source.id}: Removing {amount} {coin.name}...')
+        print(f'{self._source.id}: Removing {amount} {coin.name}')
         current = getattr(self._funds, coin.name)
         setattr(self._funds, coin.name, current - int(amount))
 
-        print(f'{self._source.id}: Saving: {self._funds.to_dict()}...')
+        print(f'{self._source.id}: Saving: {self._funds.to_dict()}')
         self._funds.save()
         return Response(reaction='👍')
 
