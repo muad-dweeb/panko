@@ -3,7 +3,7 @@
 <img src="/images/icon.png" alt="icon" width="100"/>
 <sub><div>Icon made by <a href="https://www.flaticon.com/authors/good-ware" title="Good Ware">Good Ware</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div></sub>
 
-#### Party Bank (funds manager)
+#### Discord Party Bank Bot (funds manager)
 
 ### Working Features
 
