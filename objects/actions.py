@@ -68,7 +68,7 @@ class Plus(FundedAction):
 
         print(f'{self._source.id}: Saving: {self._funds.to_dict()}')
         self._funds.save()
-        return Response(reaction='👍')
+        return Response(reaction='🪙')
 
 
 class Minus(FundedAction):
@@ -88,7 +88,7 @@ class Minus(FundedAction):
 
         print(f'{self._source.id}: Saving: {self._funds.to_dict()}')
         self._funds.save()
-        return Response(reaction='👍')
+        return Response(reaction='🪙')
 
 
 class Raw(FundedAction):
