@@ -4,7 +4,7 @@ import discord
 
 from objects import actions
 from objects.Command import Command
-from objects.Config import Config
+from objects.Config import Config, Secret
 from objects.actions import About
 
 intents = discord.Intents.default()
@@ -14,6 +14,7 @@ start = datetime.now()
 
 
 config = Config()
+secret = Secret()
 
 
 @client.event
@@ -68,4 +69,4 @@ async def on_message(message):
                 if response.message is not None:
                     await message.channel.send(embed=response.message)
 
-client.run(config.token)
+client.run(secret.token)

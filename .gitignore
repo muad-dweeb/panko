@@ -132,5 +132,5 @@ dmypy.json
 .idea
 
 # Secrets
-config.json
+secret.json
 data
