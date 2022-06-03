@@ -111,7 +111,7 @@ class About(Action):
         up_minutes = round(uptime.total_seconds() / 60, 2)
         return Response(title='About Panko!',
                         icon=config.icon,
-                        text='Party funds tracker',
+                        text='Python party funds tracker',
                         fields=[
                             ('Author', '[muad-dweeb](https://github.com/muad-dweeb/)'),
                             ('Version', config.version),
