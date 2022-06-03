@@ -119,4 +119,24 @@ class About(Action):
                         url=config.homepage)
 
 
-AVAILABLE: List[Any] = [Show, Plus, Minus, Raw, About]
+class Help(Action):
+
+    tag = 'help'
+
+    def do(self) -> Response:
+        config = Config()
+        return Response(title='Hi, I\'m Panko!',
+                        url=config.homepage,
+                        text='I manage your party\'s funds. Here\'s how...',
+                        fields=[
+                            ('Command triggers', '`!panko `\n`$`'),
+                            ('Add 5 platinum', '`!panko +5pp`'),
+                            ('Subtract 10 gold', '`$-10gp`'),
+                            ('View current funds', '`$show`'),
+                            ('View this party\'s raw JSON data', '`$raw`'),
+                            ('See this message', '`$help`'),
+                            ('See additional info', '`$about`')
+                        ])
+
+
+AVAILABLE: List[Any] = [Show, Plus, Minus, Raw, About, Help]
