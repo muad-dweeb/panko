@@ -96,7 +96,7 @@ class Raw(FundedAction):
     def do(self) -> Response:
         formatted = json.dumps(self._funds.to_dict(), indent=2)
         return Response(title='Raw JSON:',
-                        text=f'```{formatted}```',
+                        text=f'```json\n{formatted}```',
                         fields=[('file', self._funds.file_name)])
 
 
