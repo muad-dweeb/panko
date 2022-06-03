@@ -42,7 +42,9 @@ class Show(FundedAction):
     tag = 'show'
 
     def do(self) -> Response:
+        config = Config()
         return Response(title='Current funds!',
+                        icon=config.icon,
                         text=f'**platinum:** {self._funds.platinum}\n'
                              f'**gold:** {self._funds.gold}\n'
                              f'**silver:** {self._funds.silver}\n'
@@ -108,6 +110,7 @@ class About(Action):
         config = Config()
         up_minutes = round(uptime.total_seconds() / 60, 2)
         return Response(title='About Panko!',
+                        icon=config.icon,
                         text='Party funds tracker',
                         fields=[
                             ('Author', '[muad-dweeb](https://github.com/muad-dweeb/)'),
@@ -127,6 +130,7 @@ class Help(Action):
         config = Config()
         return Response(title='Hi, I\'m Panko!',
                         url=config.homepage,
+                        icon=config.icon,
                         text='I manage your party\'s funds. Here\'s how...',
                         fields=[
                             ('Command triggers', '`!panko `\n`$`'),
