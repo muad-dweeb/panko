@@ -8,8 +8,10 @@ user=$(whoami)
 sudo touch $logfile
 sudo chown $user $logfile
 
-python3 -m venv ${HOME}/.virtualenvs/panko
-
+venv_path=${HOME}/.virtualenvs/panko
+python3 -m venv $venv_path
+source ${venv_path}/bin/activate
+pip3 install -r requirements.txt
 
 symlink=${HOME}/panko
 if [ ! -e $symlink ]; then
